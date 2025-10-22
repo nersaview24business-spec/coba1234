@@ -1,0 +1,1 @@
+export { ChatbaseDashboard } from "./ChatbaseDashboard";
