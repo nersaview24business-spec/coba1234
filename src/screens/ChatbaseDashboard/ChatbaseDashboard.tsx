@@ -3,6 +3,10 @@ import {
   MessageCircleIcon,
   MoreVerticalIcon,
   PlusIcon,
+  UserPlusIcon,
+  SettingsIcon,
+  LogOutIcon,
+  CheckIcon,
 } from "lucide-react";
 import React from "react";
 import {
@@ -18,6 +22,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../../components/ui/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
 import { ProfileSettings } from "../ProfileSettings";
 
 const navigationLinks = [
@@ -59,10 +70,32 @@ const agents = [
   },
 ];
 
+const workspaces = [
+  {
+    id: 1,
+    name: "Habib Dwi K's workspace",
+    plan: "Free",
+    current: true
+  },
+  {
+    id: 2,
+    name: "Personal Projects",
+    plan: "Pro",
+    current: false
+  },
+  {
+    id: 3,
+    name: "Team Workspace",
+    plan: "Team",
+    current: false
+  },
+];
+
 export const ChatbaseDashboard = (): JSX.Element => {
   const [workspaceSettingsOpen, setWorkspaceSettingsOpen] =
     React.useState(true);
   const [showProfileSettings, setShowProfileSettings] = React.useState(false);
+  const [currentWorkspace, setCurrentWorkspace] = React.useState(workspaces[0]);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -74,28 +107,84 @@ export const ChatbaseDashboard = (): JSX.Element => {
             /
           </span>
 
-          <div className="flex items-center gap-1">
-            <div className="flex items-center gap-1 max-w-[200px]">
-              <span className="[font-family:'Inter',Helvetica] font-medium text-zinc-950 text-sm truncate">
-                Habib Dwi K&#39;s works…
-              </span>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity">
+                <div className="flex items-center gap-1 max-w-[200px]">
+                  <span className="[font-family:'Inter',Helvetica] font-medium text-zinc-950 text-sm truncate">
+                    {currentWorkspace.name.substring(0, 20)}…
+                  </span>
 
-              <Badge
-                variant="outline"
-                className="[font-family:'Inter',Helvetica] font-medium text-[#70707b] text-xs border-zinc-200 rounded-[14px]"
-              >
-                Free
-              </Badge>
-            </div>
+                  <Badge
+                    variant="outline"
+                    className="[font-family:'Inter',Helvetica] font-medium text-[#70707b] text-xs border-zinc-200 rounded-[14px]"
+                  >
+                    {currentWorkspace.plan}
+                  </Badge>
+                </div>
 
-            <Button variant="ghost" size="icon" className="h-auto w-auto p-0.5">
-              <img
-                className="w-4 h-4"
-                alt="Dropdown"
-                src="/component-1-1.svg"
-              />
-            </Button>
-          </div>
+                <Button variant="ghost" size="icon" className="h-auto w-auto p-0.5">
+                  <img
+                    className="w-4 h-4"
+                    alt="Dropdown"
+                    src="/component-1-1.svg"
+                  />
+                </Button>
+              </div>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              align="start"
+              className="w-[280px] bg-white border border-zinc-200 rounded-lg shadow-lg p-1"
+            >
+              <div className="px-2 py-2">
+                <p className="[font-family:'Inter',Helvetica] font-medium text-[#70707b] text-xs mb-2">
+                  WORKSPACES
+                </p>
+                {workspaces.map((workspace) => (
+                  <DropdownMenuItem
+                    key={workspace.id}
+                    className="flex items-center justify-between px-3 py-2.5 rounded-md cursor-pointer hover:bg-[#f9f9f9] [font-family:'Inter',Helvetica] font-medium text-zinc-950 text-sm"
+                    onClick={() => setCurrentWorkspace(workspace)}
+                  >
+                    <div className="flex items-center gap-2 flex-1">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <span className="truncate">{workspace.name}</span>
+                        <Badge
+                          variant="outline"
+                          className="[font-family:'Inter',Helvetica] font-medium text-[#70707b] text-xs border-zinc-200 rounded-[14px] shrink-0"
+                        >
+                          {workspace.plan}
+                        </Badge>
+                      </div>
+                      {workspace.id === currentWorkspace.id && (
+                        <CheckIcon className="w-4 h-4 text-zinc-950 shrink-0" />
+                      )}
+                    </div>
+                  </DropdownMenuItem>
+                ))}
+              </div>
+
+              <DropdownMenuSeparator className="my-1 bg-zinc-200" />
+
+              <DropdownMenuItem className="flex items-center gap-2 px-3 py-2.5 rounded-md cursor-pointer hover:bg-[#f9f9f9] [font-family:'Inter',Helvetica] font-medium text-zinc-950 text-sm">
+                <UserPlusIcon className="w-4 h-4 text-[#70707b]" />
+                Create new workspace
+              </DropdownMenuItem>
+
+              <DropdownMenuItem className="flex items-center gap-2 px-3 py-2.5 rounded-md cursor-pointer hover:bg-[#f9f9f9] [font-family:'Inter',Helvetica] font-medium text-zinc-950 text-sm">
+                <SettingsIcon className="w-4 h-4 text-[#70707b]" />
+                Workspace settings
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator className="my-1 bg-zinc-200" />
+
+              <DropdownMenuItem className="flex items-center gap-2 px-3 py-2.5 rounded-md cursor-pointer hover:bg-[#f9f9f9] [font-family:'Inter',Helvetica] font-medium text-red-600 text-sm">
+                <LogOutIcon className="w-4 h-4" />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <div className="flex items-center gap-3">
